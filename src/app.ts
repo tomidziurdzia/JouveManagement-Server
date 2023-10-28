@@ -2,12 +2,14 @@ import express, { Application } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import routes from "./routes";
+import db from "./db/connection";
+import connectDB from "./db/connection";
 
 const app: Application = express();
-app.use(express.json());
 dotenv.config();
 
-// Llamar DB
+// Call Database
+connectDB();
 
 // Configurate CORS
 // const whitelist = [process.env.FRONTEND_URL];
@@ -24,7 +26,8 @@ dotenv.config();
 // };
 
 // app.use(cors(corsOptions));
-// app.use(cors());
+app.use(cors());
+app.use(express.json());
 
 // Routing
 app.use("/api", routes);
