@@ -1,10 +1,8 @@
 import express, { Application } from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 
 const app: Application = express();
 app.use(express.json());
-dotenv.config();
 
 // Configurate CORS
 const whitelist = [process.env.FRONTEND_URL];
@@ -22,5 +20,11 @@ const whitelist = [process.env.FRONTEND_URL];
 
 // app.use(cors(corsOptions));
 app.use(cors());
+
+const port = process.env.PORT || 3000;
+
+app.listen(() => {
+  console.log(`Server running on port ${port}`);
+});
 
 export default app;
