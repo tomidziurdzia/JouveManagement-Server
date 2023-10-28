@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-const db = new Sequelize("jouve_schema", "root", "Walter960", {
+export const db = new Sequelize("jouve_schema", "root", "Walter960", {
   host: "localhost",
   dialect: "mysql",
   // logging: false,

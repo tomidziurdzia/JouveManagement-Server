@@ -1,4 +1,6 @@
-export interface User {
+import { Model } from "sequelize";
+
+export interface UserInterface extends Model {
   id?: string;
   name: string;
   lastname: string;
