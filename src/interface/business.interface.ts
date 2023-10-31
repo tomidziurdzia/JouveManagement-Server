@@ -1,9 +1,7 @@
-import { Model } from "sequelize";
-
-export interface UserInterface extends Model {
+export interface BusinessInterface {
   id?: string;
-  name: string;
-  lastname: string;
+  businessName: string;
+  cuit: number;
   email: string;
   picture?: string;
   password: string;

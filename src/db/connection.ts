@@ -1,7 +1,13 @@
 import { Sequelize } from "sequelize";
+import dotenv from "dotenv";
 
-export const db = new Sequelize("jouve_schema", "root", "Walter960", {
-  host: "localhost",
+dotenv.config();
+
+export const db = new Sequelize({
+  database: process.env.DB_NAME,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  host: process.env.DB_HOST,
   dialect: "mysql",
   // logging: false,
 });

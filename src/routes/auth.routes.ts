@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-  authUser,
+  authBusiness,
   confirmToken,
   forgetPassword,
   checkToken,
@@ -10,7 +10,7 @@ import {
 const router: Router = Router();
 
 router.get("/confirm/:token", confirmToken);
-router.post("/login", authUser);
+router.post("/login", authBusiness);
 router.post("/forget-password", forgetPassword);
 router.route("/forget-password/:token").get(checkToken).post(newPassword);
 
