@@ -5,4 +5,4 @@ const generateToken = () => {
   return random + date;
 };
 
-export default generateToken;
+export { generateToken };

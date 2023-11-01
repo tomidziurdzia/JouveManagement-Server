@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Business from "../models/business.model";
 import { BusinessInterface } from "../interface/business.interface";
-import generateToken from "../utils/generateToken";
+import { generateToken, hashPassword } from "../utils";
 
 const getBusinesses = async (req: Request, res: Response) => {
   const business = await Business.findAll();
@@ -42,6 +42,11 @@ const postBusiness = async (req: Request, res: Response) => {
 
     // Generar token de autenticacion de email
     newBusiness.token = generateToken();
+
+    // Hashear password
+    newBusiness.password = hashPassword(password);
+
+    //TODO: Enviar email de confirmacion
 
     await newBusiness.save();
     res.json({ newBusiness });

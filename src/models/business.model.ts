@@ -6,7 +6,13 @@ interface BusinessCreationAttributes
   extends Optional<BusinessInterface, "id"> {}
 
 class Business extends Model<BusinessInterface, BusinessCreationAttributes> {
+  id: string | undefined;
+  businessName: string | undefined;
+  cuit: number | undefined;
+  email: string | undefined;
   token: string | undefined;
+  password: string | undefined;
+  confirmed: boolean | undefined;
 }
 Business.init(
   {
