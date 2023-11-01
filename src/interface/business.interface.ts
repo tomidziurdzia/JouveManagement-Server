@@ -8,4 +8,5 @@ export interface BusinessInterface {
   confirmed: boolean;
   googleAccount: boolean;
   token: string;
+  role: "owner" | "employee";
 }

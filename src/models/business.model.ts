@@ -5,7 +5,9 @@ import { db as sequelize } from "../db/connection";
 interface BusinessCreationAttributes
   extends Optional<BusinessInterface, "id"> {}
 
-class Business extends Model<BusinessInterface, BusinessCreationAttributes> {}
+class Business extends Model<BusinessInterface, BusinessCreationAttributes> {
+  token: string | undefined;
+}
 Business.init(
   {
     id: {
@@ -46,6 +48,11 @@ Business.init(
     },
     token: {
       type: DataTypes.STRING,
+    },
+    role: {
+      type: DataTypes.ENUM("owner", "employee"),
+      defaultValue: "owner",
+      allowNull: false,
     },
   },
   {

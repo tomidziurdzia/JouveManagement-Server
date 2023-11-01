@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Business from "../models/business.model";
 import { BusinessInterface } from "../interface/business.interface";
+import generateToken from "../utils/generateToken";
 
 const getBusinesses = async (req: Request, res: Response) => {
   const business = await Business.findAll();
@@ -11,7 +12,6 @@ const postBusiness = async (req: Request, res: Response) => {
   await Business.sync();
   // Prevenir Business duplicados
   const { businessName, cuit, email, password }: BusinessInterface = req.body;
-
   const businessExist = await Business.findOne({ where: { email } });
 
   if (businessExist) {
@@ -39,6 +39,9 @@ const postBusiness = async (req: Request, res: Response) => {
   }
   try {
     const newBusiness = new Business(req.body);
+
+    // Generar token de autenticacion de email
+    newBusiness.token = generateToken();
 
     await newBusiness.save();
     res.json({ newBusiness });
