@@ -13,6 +13,7 @@ class Business extends Model<BusinessInterface, BusinessCreationAttributes> {
   token: string | undefined;
   password: string | undefined;
   confirmed: boolean | undefined;
+  picture: string | undefined;
 }
 Business.init(
   {

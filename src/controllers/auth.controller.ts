@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Business from "../models/business.model";
 import { BusinessInterface } from "../interface/business.interface";
-import { comparePassword } from "../utils";
+import { comparePassword, generateJWT } from "../utils";
 
 const authBusiness = async (req: Request, res: Response) => {
   const { email, password }: BusinessInterface = req.body;
@@ -36,6 +36,7 @@ const authBusiness = async (req: Request, res: Response) => {
       id: businessExist.id,
       businessName: businessExist.businessName,
       email: businessExist.email,
+      token: generateJWT(businessExist.id!),
     });
   } else {
     const error = new Error("The password is incorrect");
