@@ -1,7 +1,7 @@
 export interface BusinessInterface {
   id?: string;
   businessName: string;
-  cuit: number;
+  cuit: string;
   email: string;
   picture?: string;
   password: string;

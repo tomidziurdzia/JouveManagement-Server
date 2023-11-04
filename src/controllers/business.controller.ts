@@ -1,7 +1,14 @@
 import { Request, Response } from "express";
+import { Op } from "sequelize";
 import Business from "../models/business.model";
 import { BusinessInterface } from "../interface/business.interface";
-import { generateToken, hashPassword } from "../utils";
+import {
+  generateToken,
+  hashPassword,
+  sendEmailValidationBusiness,
+  resetPasswordValidationBusiness,
+  checkRegexPassword,
+} from "../utils";
 
 const getBusinesses = async (req: Request, res: Response) => {
   const business = await Business.findAll();
@@ -13,8 +20,14 @@ const postBusiness = async (req: Request, res: Response) => {
   await Business.sync();
   // Prevenir Business duplicados
   const { businessName, cuit, email, password }: BusinessInterface = req.body;
-  const businessExist = await Business.findOne({ where: { email } });
-
+  const businessExist = await Business.findOne({
+    where: {
+      [Op.or]: [
+        { email }, // Verificar si el correo electrónico ya existe
+        { cuit }, // Verificar si el nombre de la empresa ya existe
+      ],
+    },
+  });
   if (businessExist) {
     const error = new Error("Business already registered");
     return res.status(400).json({ msg: error.message });
@@ -24,8 +37,13 @@ const postBusiness = async (req: Request, res: Response) => {
     return res.status(400).json({ msg: error.message });
   }
 
-  if (cuit?.toString() === "") {
-    const error = new Error("Business name cannot be empty");
+  if (cuit === "") {
+    const error = new Error("Cuit cannot be empty");
+    return res.status(400).json({ msg: error.message });
+  }
+
+  if (!/^\d{11}$/.test(cuit)) {
+    const error = new Error("Cuit must have 11 numbers");
     return res.status(400).json({ msg: error.message });
   }
 
@@ -38,7 +56,9 @@ const postBusiness = async (req: Request, res: Response) => {
     const error = new Error("Password cannot be empty");
     return res.status(400).json({ msg: error.message });
   }
+
   try {
+    checkRegexPassword(password);
     const newBusiness = new Business(req.body);
 
     // Generar token de autenticacion de email
@@ -47,12 +67,13 @@ const postBusiness = async (req: Request, res: Response) => {
     // Hashear password
     newBusiness.password = hashPassword(password);
 
-    //TODO: Enviar email de confirmacion
+    // Send email to confirm account with token
+    await sendEmailValidationBusiness(email, newBusiness.token, businessName);
 
     await newBusiness.save();
-    res.json({ newBusiness });
+    res.json(newBusiness);
   } catch (error: any) {
-    console.error(error.message);
+    console.error(error);
     res.status(400).json({ msg: error.message });
   }
 };
@@ -72,25 +93,28 @@ const getBusiness = async (req: Request, res: Response) => {
 
 const putBusiness = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { businessName, picture, email, password } = req.body;
   const businessExist = await Business.findByPk(id);
   if (!businessExist) {
     const error = new Error("Business doesn't exist");
     return res.status(404).json({ msg: error.message });
   }
+
   //Este es un formulario una vez que se esta logueado para cambiar datos
   try {
-    businessExist!.businessName =
-      req.body.businessName || businessExist?.businessName;
-    businessExist!.email = req.body.email || businessExist?.email;
-    businessExist!.picture = businessExist!.picture =
-      req.body.picture || businessExist?.picture;
-    hashPassword(req.body.password) || businessExist?.password;
+    businessExist!.businessName = businessName || businessExist?.businessName;
+    businessExist!.picture = picture || businessExist?.picture;
+    businessExist!.email = email || businessExist?.email;
+
+    checkRegexPassword(password);
+    businessExist.password = hashPassword(password) || businessExist?.password;
 
     await businessExist.save();
 
     res.json({ msg: "We have saved your details" });
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
+    return res.status(400).json({ msg: error.message });
   }
 };
 
@@ -106,6 +130,13 @@ const forgetPasswordBusiness = async (req: Request, res: Response) => {
     businessExist.token = generateToken();
 
     await businessExist.save();
+
+    // Send email to confirm account with token
+    await resetPasswordValidationBusiness(
+      email,
+      businessExist.token,
+      businessExist.businessName!
+    );
 
     res.json({ msg: "We have sent an email with instructions" });
   } catch (error) {

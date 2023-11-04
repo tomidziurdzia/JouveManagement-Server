@@ -8,7 +8,7 @@ interface BusinessCreationAttributes
 class Business extends Model<BusinessInterface, BusinessCreationAttributes> {
   id: string | undefined;
   businessName: string | undefined;
-  cuit: number | undefined;
+  cuit: string | undefined;
   email: string | undefined;
   token: string | undefined;
   password: string | undefined;
@@ -28,7 +28,7 @@ Business.init(
       allowNull: false,
     },
     cuit: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
