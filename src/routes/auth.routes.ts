@@ -2,16 +2,19 @@ import { Router } from "express";
 import {
   authBusiness,
   confirmToken,
-  forgetPassword,
+  forgetPasswordBusiness,
   checkToken,
-  newPassword,
+  newPasswordBusiness,
 } from "../controllers";
 
 const router: Router = Router();
 
 router.get("/confirm/:token", confirmToken);
 router.post("/login", authBusiness);
-router.post("/forget-password", forgetPassword);
-router.route("/forget-password/:token").get(checkToken).post(newPassword);
+router.post("/forget-password", forgetPasswordBusiness);
+router
+  .route("/forget-password/:token")
+  .get(checkToken)
+  .post(newPasswordBusiness);
 
 export default router;

@@ -14,6 +14,7 @@ class Business extends Model<BusinessInterface, BusinessCreationAttributes> {
   password: string | undefined;
   confirmed: boolean | undefined;
   picture: string | undefined;
+  role: string | undefined;
 }
 Business.init(
   {

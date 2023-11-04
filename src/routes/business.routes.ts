@@ -8,15 +8,17 @@ import {
   newPasswordBusiness,
   deleteBusiness,
 } from "../controllers";
+import { checkAuth } from "../middleware";
 
 const router: Router = Router();
 
-router.get("/", getBusinesses);
-router.post("/", postBusiness);
-router.get("/:id", /*checkAuth,*/ getBusiness);
-router.put("/:id", putBusiness);
+router.route("/").get(getBusinesses).post(postBusiness);
+router
+  .route("/:id")
+  .get(checkAuth, getBusiness)
+  .put(putBusiness)
+  .delete(deleteBusiness);
 router.post("/forget-password", forgetPasswordBusiness);
 router.post("/forget-password/:token", newPasswordBusiness);
-router.delete("/:id", deleteBusiness);
 
 export default router;

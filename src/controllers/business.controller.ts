@@ -118,68 +118,6 @@ const putBusiness = async (req: Request, res: Response) => {
   }
 };
 
-const forgetPasswordBusiness = async (req: Request, res: Response) => {
-  const { email } = req.body;
-  const businessExist = await Business.findOne({ where: { email } });
-  if (!businessExist) {
-    const error = new Error("Business doesn't exist");
-    return res.status(404).json({ msg: error.message });
-  }
-
-  try {
-    businessExist.token = generateToken();
-
-    await businessExist.save();
-
-    // Send email to confirm account with token
-    await resetPasswordValidationBusiness(
-      email,
-      businessExist.token,
-      businessExist.businessName!
-    );
-
-    res.json({ msg: "We have sent an email with instructions" });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const newPasswordBusiness = async (req: Request, res: Response) => {
-  const { token } = req.params;
-  const { password } = req.body;
-
-  const businessExist = await Business.findOne({ where: { token } });
-
-  if (!businessExist) {
-    const error = new Error("Invalid token");
-    return res.status(403).json({ msg: error.message });
-  }
-
-  if (password === "") {
-    const error = new Error("Password cannot be empty");
-    return res.status(400).json({ msg: error.message });
-  }
-
-  if (businessExist) {
-    // businessExist.password = hashPassword(password);
-    // businessExist.token = "";
-
-    try {
-      checkRegexPassword(password);
-      businessExist.password =
-        hashPassword(password) || businessExist?.password;
-      await businessExist.save();
-      res.json({ msg: "Password successfully modified" });
-    } catch (error: any) {
-      console.log(error);
-      res.status(400).json({ msg: error.message });
-    }
-  } else {
-    const error = new Error("Invalid token");
-    return res.status(403).json({ msg: error.message });
-  }
-};
-
 const deleteBusiness = async (req: Request, res: Response) => {
   const { id } = req.params;
   const businessExist = await Business.findByPk(id);
@@ -199,7 +137,5 @@ export {
   postBusiness,
   getBusiness,
   putBusiness,
-  forgetPasswordBusiness,
-  newPasswordBusiness,
   deleteBusiness,
 };
