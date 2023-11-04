@@ -3,3 +3,4 @@ export * from "./hashPassword";
 export * from "./generateJwt";
 export * from "./authEmail";
 export * from "./checkPassword";
+export * from "./checkExistence";

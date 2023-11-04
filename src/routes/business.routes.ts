@@ -16,8 +16,8 @@ router.route("/").get(getBusinesses).post(postBusiness);
 router
   .route("/:id")
   .get(checkAuth, getBusiness)
-  .put(putBusiness)
-  .delete(deleteBusiness);
+  .put(checkAuth, putBusiness)
+  .delete(checkAuth, deleteBusiness);
 router.post("/forget-password", forgetPasswordBusiness);
 router.post("/forget-password/:token", newPasswordBusiness);
 
