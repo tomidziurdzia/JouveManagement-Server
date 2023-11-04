@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import Business from "../models/business.model";
+import { Business } from "../models";
 
 const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
   const authorization = req.header("Authorization");
@@ -27,11 +27,11 @@ const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     req.body.business = {
+      id_business: checkBusiness.id_business,
       businessName: checkBusiness.businessName,
       cuit: checkBusiness.cuit,
       email: checkBusiness.email,
       picture: checkBusiness.picture,
-      role: checkBusiness.role,
     };
 
     return next();

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Business from "../models/business.model";
+import { Business } from "../models";
 import { BusinessInterface } from "../interface/business.interface";
 import {
   checkRegexPassword,
@@ -40,10 +40,10 @@ const authBusiness = async (req: Request, res: Response) => {
   const isMatch = comparePassword(password, businessExist.password!);
   if (isMatch) {
     res.json({
-      id: businessExist.id,
+      id_business: businessExist.id_business,
       businessName: businessExist.businessName,
       email: businessExist.email,
-      token: generateJWT(businessExist.id!),
+      token: generateJWT(businessExist.id_business!),
     });
   } else {
     const error = new Error("The password is incorrect");

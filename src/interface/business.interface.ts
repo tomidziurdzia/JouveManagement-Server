@@ -1,5 +1,5 @@
 export interface BusinessInterface {
-  id?: string;
+  id_business?: string;
   businessName: string;
   cuit: string;
   email: string;
@@ -8,5 +8,4 @@ export interface BusinessInterface {
   confirmed: boolean;
   googleAccount: boolean;
   token: string;
-  role: "owner" | "employee";
 }

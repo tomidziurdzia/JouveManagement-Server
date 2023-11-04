@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
 import { Op } from "sequelize";
-import Business from "../models/business.model";
+import { Business } from "../models";
 import { BusinessInterface } from "../interface/business.interface";
 import {
   generateToken,
   hashPassword,
   sendEmailValidationBusiness,
-  resetPasswordValidationBusiness,
   checkRegexPassword,
 } from "../utils";
 

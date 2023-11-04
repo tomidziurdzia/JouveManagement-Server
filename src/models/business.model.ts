@@ -3,10 +3,10 @@ import { BusinessInterface } from "../interface/business.interface";
 import { db as sequelize } from "../db/connection";
 
 interface BusinessCreationAttributes
-  extends Optional<BusinessInterface, "id"> {}
+  extends Optional<BusinessInterface, "id_business"> {}
 
 class Business extends Model<BusinessInterface, BusinessCreationAttributes> {
-  id: string | undefined;
+  id_business: string | undefined;
   businessName: string | undefined;
   cuit: string | undefined;
   email: string | undefined;
@@ -14,11 +14,10 @@ class Business extends Model<BusinessInterface, BusinessCreationAttributes> {
   password: string | undefined;
   confirmed: boolean | undefined;
   picture: string | undefined;
-  role: string | undefined;
 }
 Business.init(
   {
-    id: {
+    id_business: {
       type: DataTypes.UUID,
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
@@ -57,11 +56,6 @@ Business.init(
     token: {
       type: DataTypes.STRING,
     },
-    role: {
-      type: DataTypes.ENUM("owner", "employee"),
-      defaultValue: "owner",
-      allowNull: false,
-    },
   },
   {
     sequelize,
@@ -69,4 +63,4 @@ Business.init(
   }
 );
 
-export default Business;
+export { Business };
