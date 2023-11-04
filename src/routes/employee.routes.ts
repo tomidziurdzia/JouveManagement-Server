@@ -5,7 +5,7 @@ import {
   getEmployee,
   putEmployee,
   deleteEmployee,
-} from "../controllers/employee.controller";
+} from "../controllers";
 import { checkAuth } from "../middleware";
 
 const router: Router = express.Router();
