@@ -14,7 +14,6 @@ class Vehicle extends Model<VehicleInterface, VehicleCreationAttributes> {
     | "balancin truck"
     | "semirremolque"
     | "tractor"
-    | ""
     | undefined;
   picture?: string;
   id_business: string | undefined;

@@ -84,7 +84,7 @@ const createEmployee = async (req: Request, res: Response) => {
     // Hashear password
     newEmployee.password = hashPassword(password);
 
-    // Asing id business
+    // Asign id business
     newEmployee.id_business = req.body.business.id_business;
 
     await newEmployee.save();
@@ -115,7 +115,8 @@ const getEmployee = async (req: Request, res: Response) => {
 const putEmployee = async (req: Request, res: Response) => {
   const { id } = req.params;
   const businessId = req.body.business.id_business;
-  const { name, lastname, picture, password, type } = req.body;
+  const { name, lastname, picture, password, type }: EmployeeInterface =
+    req.body;
 
   try {
     const employeeExist = await Employee.findByPk(id);
@@ -142,6 +143,7 @@ const putEmployee = async (req: Request, res: Response) => {
 };
 
 const deleteEmployee = async (req: Request, res: Response) => {
+  //TODO: Me falta agregar que no pueda eliminar empleados si tienen viajes asignados
   const { id } = req.params;
   const businessId = req.body.business.id_business;
   try {
