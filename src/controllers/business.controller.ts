@@ -161,14 +161,18 @@ const newPasswordBusiness = async (req: Request, res: Response) => {
   }
 
   if (businessExist) {
-    businessExist.password = hashPassword(password);
-    businessExist.token = "";
+    // businessExist.password = hashPassword(password);
+    // businessExist.token = "";
 
     try {
+      checkRegexPassword(password);
+      businessExist.password =
+        hashPassword(password) || businessExist?.password;
       await businessExist.save();
       res.json({ msg: "Password successfully modified" });
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      res.status(400).json({ msg: error.message });
     }
   } else {
     const error = new Error("Invalid token");
@@ -180,7 +184,7 @@ const deleteBusiness = async (req: Request, res: Response) => {
   const { id } = req.params;
   const businessExist = await Business.findByPk(id);
 
-  //TODO: Verificar luego que no tenga nada creado antes de borrar
+  //TODO: Verificar luego que no tenga nada creado antes de borrar. ESTO QUEDA PARA CUANDO YA TENGA CREADO LOS DEMAS MODELOS
   try {
     await businessExist?.destroy();
 
