@@ -45,7 +45,7 @@ Employee.init(
       allowNull: false,
     },
     type: {
-      type: DataTypes.ENUM("Administrative", "Driver", "Assistant"),
+      type: DataTypes.ENUM("Administrative", "Driver", "Assistant", "-"),
       allowNull: false,
     },
   },

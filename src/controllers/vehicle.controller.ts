@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Business, Vehicle } from "../models";
+import { Business, Travel, Vehicle } from "../models";
 import { VehicleInterface } from "../interface/vehicle.interface";
 import { Op } from "sequelize";
 
@@ -114,15 +114,27 @@ const putVehicles = async (req: Request, res: Response) => {
   }
 };
 const deleteVehicle = async (req: Request, res: Response) => {
-  //TODO: Me falta agregar que no pueda eliminar vehiculos si tienen viajes asignados
   const { id } = req.params;
   const businessId = req.body.business.id_business;
+
   try {
     const vehicleExist = await Vehicle.findByPk(id);
+    const travelExist: Travel[] = await Travel.findAll({
+      where: {
+        [Op.or]: [{ id_vehicle: id }, { id_semirremolque: id }],
+      },
+    });
+    console.log(travelExist.length);
     if (vehicleExist?.id_business !== businessId) {
       return res
         .status(404)
         .json({ msg: "Does not belong to the business logged in" });
+    }
+
+    if (travelExist.length !== 0) {
+      return res.status(404).json({
+        msg: "You cannot remove a vehicle if it has had some travel",
+      });
     }
 
     await vehicleExist?.destroy();

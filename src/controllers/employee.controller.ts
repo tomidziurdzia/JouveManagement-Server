@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Business, Employee } from "../models";
+import { Business, Employee, Travel } from "../models";
 import { EmployeeInterface } from "../interface/employee.interface";
 import { Op } from "sequelize";
 import { checkRegexPassword, hashPassword } from "../utils";
@@ -143,15 +143,26 @@ const putEmployee = async (req: Request, res: Response) => {
 };
 
 const deleteEmployee = async (req: Request, res: Response) => {
-  //TODO: Me falta agregar que no pueda eliminar empleados si tienen viajes asignados
   const { id } = req.params;
   const businessId = req.body.business.id_business;
   try {
     const employeeExist = await Employee.findByPk(id);
+    const travelExist = await Travel.findAll({
+      where: {
+        [Op.or]: [{ id_driver: id }, { id_assistant: id }],
+      },
+    });
+
     if (employeeExist?.id_business !== businessId) {
       return res
         .status(404)
         .json({ msg: "Does not belong to the business logged in" });
+    }
+
+    if (travelExist.length !== 0) {
+      return res.status(404).json({
+        msg: "You cannot remove an employee if he/she has had some travel",
+      });
     }
 
     await employeeExist?.destroy();

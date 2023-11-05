@@ -45,7 +45,8 @@ Vehicle.init(
         "chasis truck",
         "balancin truck",
         "semirremolque",
-        "tractor"
+        "tractor",
+        "-"
       ),
       allowNull: false,
     },
