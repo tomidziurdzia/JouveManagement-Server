@@ -37,7 +37,7 @@ Travel.belongsTo(Employee, {
   as: "truck_assistant",
 });
 
-Shipment.hasOne(Travel, { foreignKey: "id_travel" });
-Travel.hasMany(Shipment, { foreignKey: "id_travel" });
+Shipment.belongsTo(Travel, { foreignKey: "id_travel" });
+Travel.belongsTo(Shipment, { foreignKey: "id_travel" });
 
 export { Business, Employee, Vehicle, Travel, Shipment };

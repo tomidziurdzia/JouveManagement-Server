@@ -124,7 +124,6 @@ const deleteVehicle = async (req: Request, res: Response) => {
         [Op.or]: [{ id_vehicle: id }, { id_semirremolque: id }],
       },
     });
-    console.log(travelExist.length);
     if (vehicleExist?.id_business !== businessId) {
       return res
         .status(404)

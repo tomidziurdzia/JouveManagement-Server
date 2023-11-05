@@ -7,7 +7,16 @@ interface ShipmentCreationAttributes
 
 class Shipment extends Model<ShipmentInterface, ShipmentCreationAttributes> {
   id_travel?: string;
+  id_shipment?: string;
   id_business: string | undefined;
+  Business: any;
+  from: string | undefined;
+  to: string | undefined;
+  client: string | undefined;
+  description: string | undefined;
+  delivered: boolean | undefined;
+  reason: string | undefined;
+  picture: string | undefined;
 }
 Shipment.init(
   {
@@ -36,6 +45,14 @@ Shipment.init(
     delivered: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    },
+    reason: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    picture: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {

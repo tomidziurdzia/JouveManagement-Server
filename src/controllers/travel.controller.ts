@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Travel, Business, Employee, Vehicle } from "../models";
+import { Travel, Business, Employee, Vehicle, Shipment } from "../models";
 import { TravelInterface } from "../interface/travel.interface";
 
 const getTravels = async (req: Request, res: Response) => {
@@ -74,29 +74,28 @@ const getTravels = async (req: Request, res: Response) => {
 
 const createTravel = async (req: Request, res: Response) => {
   const { date, id_driver, id_truck, id_semi } = req.body;
-
-  const driverExist = await Employee.findAll({
-    where: {
-      id_employee: id_driver,
-      type: "Driver",
-    },
-  });
-
-  const vehicleExist = await Vehicle.findAll({
-    where: {
-      id_vehicle: id_truck,
-      typeVehicle: ["chasis truck", "balancin truck", "tractor"],
-    },
-  });
-
-  const semirremolqueExist = await Vehicle.findAll({
-    where: {
-      id_vehicle: id_semi!,
-      typeVehicle: ["semirremolque"],
-    },
-  });
-
   try {
+    const driverExist = await Employee.findAll({
+      where: {
+        id_employee: id_driver,
+        type: "Driver",
+      },
+    });
+
+    const vehicleExist = await Vehicle.findAll({
+      where: {
+        id_vehicle: id_truck,
+        typeVehicle: ["chasis truck", "balancin truck", "tractor"],
+      },
+    });
+
+    const semirremolqueExist = await Vehicle.findAll({
+      where: {
+        id_vehicle: id_semi!,
+        typeVehicle: ["semirremolque"],
+      },
+    });
+
     await Travel.sync();
     if (date === "") {
       const error = new Error("Date cannot be empty");
@@ -144,7 +143,6 @@ const createTravel = async (req: Request, res: Response) => {
     await newTravel.save();
     res.json(newTravel);
   } catch (error: any) {
-    console.log("chau");
     console.error(error);
     res.status(400).json({ msg: error.message });
   }
@@ -282,14 +280,25 @@ const deleteTravel = async (req: Request, res: Response) => {
 
   try {
     const travelExist = await Travel.findByPk(id);
+    const shipmentExist = await Shipment.findAll({
+      where: { id_travel: id },
+    });
+
+    console.log(shipmentExist.length);
     if (travelExist?.id_business !== businessId) {
       return res
         .status(404)
         .json({ msg: "Does not belong to the business logged in" });
     }
 
+    if (shipmentExist.length !== 0) {
+      return res.status(404).json({
+        msg: "You cannot remove a travel if it has had some travel",
+      });
+    }
+
     await travelExist?.destroy();
-    res.json({ msg: "Employee successfully eliminated" });
+    res.json({ msg: "Travel successfully eliminated" });
   } catch (error: any) {
     console.log(error);
     return res.status(400).json({ msg: error.message });
