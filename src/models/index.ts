@@ -2,6 +2,7 @@ import { Business } from "./business.model";
 import { Employee } from "./employee.model";
 import { Vehicle } from "./vehicle.model";
 import { Travel } from "./travel.model";
+import { Shipment } from "./shipment.model";
 
 // Business
 Business.hasMany(Employee, { foreignKey: "id_business" });
@@ -13,26 +14,8 @@ Vehicle.belongsTo(Business, { foreignKey: "id_business" });
 Business.hasMany(Travel, { foreignKey: "id_business" });
 Travel.belongsTo(Business, { foreignKey: "id_business" });
 
-// Travel.belongsToMany(Employee, {
-//   foreignKey: "id_employee",
-//   through: "Driver_Travel",
-// });
-// Employee.belongsToMany(Travel, {
-//   foreignKey: "id_employee",
-//   through: "Driver_Travel",
-// });
-
-// Modelo Employee
-// Employee.belongsToMany(Travel, {
-//   through: "EmployeeTravel", // Nombre de la tabla intermedia
-//   foreignKey: "id_employee", // Clave foránea en la tabla intermedia
-// });
-
-// // Modelo Travel
-// Travel.belongsToMany(Employee, {
-//   through: "EmployeeTravel", // Nombre de la tabla intermedia
-//   foreignKey: "id_travel", // Clave foránea en la tabla intermedia
-// });
+Business.hasMany(Shipment, { foreignKey: "id_business" });
+Shipment.belongsTo(Business, { foreignKey: "id_business" });
 
 Travel.belongsTo(Vehicle, {
   foreignKey: "id_vehicle",
@@ -54,4 +37,7 @@ Travel.belongsTo(Employee, {
   as: "truck_assistant",
 });
 
-export { Business, Employee, Vehicle, Travel };
+Shipment.hasOne(Travel, { foreignKey: "id_travel" });
+Travel.hasMany(Shipment, { foreignKey: "id_travel" });
+
+export { Business, Employee, Vehicle, Travel, Shipment };

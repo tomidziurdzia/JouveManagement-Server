@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import { Business, Employee, Vehicle } from "../models";
+import { Travel, Business, Employee, Vehicle } from "../models";
 import { TravelInterface } from "../interface/travel.interface";
-import { Op } from "sequelize";
-import { Travel } from "../models";
 
 const getTravels = async (req: Request, res: Response) => {
   const businessId = req.body.business.id_business;

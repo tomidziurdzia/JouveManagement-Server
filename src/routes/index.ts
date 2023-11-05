@@ -4,6 +4,7 @@ import authRoutes from "./auth.routes";
 import employeeRoutes from "./employee.routes";
 import vehicleRoutes from "./vehicle.routes";
 import travelRoutes from "./travel.routes";
+import shipmentRoutes from "./shipment.routes";
 
 const router: Router = Router();
 
@@ -12,5 +13,6 @@ router.use("/auth", authRoutes);
 router.use("/employee", employeeRoutes);
 router.use("/vehicle", vehicleRoutes);
 router.use("/travel", travelRoutes);
+router.use("/shipment", shipmentRoutes);
 
 export default router;
