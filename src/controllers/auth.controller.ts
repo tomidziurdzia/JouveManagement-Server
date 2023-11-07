@@ -53,6 +53,7 @@ const authBusiness = async (req: Request, res: Response) => {
 
 const confirmToken = async (req: Request, res: Response) => {
   const { token } = req.params;
+  console.log(token);
   const businessExist = await Business.findOne({ where: { token } });
 
   if (!businessExist) {

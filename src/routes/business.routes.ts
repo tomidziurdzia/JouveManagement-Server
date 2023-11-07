@@ -3,9 +3,8 @@ import {
   getBusinesses,
   postBusiness,
   putBusiness,
-  forgetPasswordBusiness,
-  newPasswordBusiness,
   deleteBusiness,
+  getBusiness,
 } from "../controllers";
 import { checkAuth } from "../middleware";
 
@@ -14,9 +13,8 @@ const router: Router = Router();
 router.route("/").get(getBusinesses).post(postBusiness);
 router
   .route("/:id")
+  .get(checkAuth, getBusiness)
   .put(checkAuth, putBusiness)
   .delete(checkAuth, deleteBusiness);
-router.post("/forget-password", forgetPasswordBusiness);
-router.post("/forget-password/:token", newPasswordBusiness);
 
 export default router;
