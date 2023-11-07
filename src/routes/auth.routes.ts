@@ -5,7 +5,9 @@ import {
   forgetPasswordBusiness,
   checkToken,
   newPasswordBusiness,
+  checkSession,
 } from "../controllers";
+import { checkAuth } from "../middleware";
 
 const router: Router = Router();
 
@@ -16,5 +18,6 @@ router
   .route("/forget-password/:token")
   .get(checkToken)
   .post(newPasswordBusiness);
+router.get("/", checkAuth, checkSession);
 
 export default router;

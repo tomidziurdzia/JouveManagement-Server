@@ -98,12 +98,17 @@ const forgetPasswordBusiness = async (req: Request, res: Response) => {
 
 const checkToken = async (req: Request, res: Response) => {
   const { token } = req.params;
-  const businessExist = await Business.findOne({ where: { token } });
-  if (!businessExist) {
-    const error = new Error("Invalid token");
-    return res.status(403).json({ msg: error.message });
-  } else {
-    res.json({ msg: "Token valid, business exists" });
+  try {
+    console.log(token);
+    const businessExist = await Business.findOne({ where: { token } });
+    if (!businessExist) {
+      const error = new Error("Invalid token");
+      return res.status(403).json({ msg: error.message });
+    } else {
+      res.json({ msg: "Token valid, business exists" });
+    }
+  } catch (error: any) {
+    return res.status(400).json({ msg: error.message });
   }
 };
 
@@ -140,10 +145,17 @@ const newPasswordBusiness = async (req: Request, res: Response) => {
   }
 };
 
+const checkSession = async (req: Request, res: Response) => {
+  const { body } = req;
+  body!.business.token = generateJWT(body.business!.id_business);
+  res.json(body.business);
+};
+
 export {
   authBusiness,
   confirmToken,
   forgetPasswordBusiness,
   checkToken,
   newPasswordBusiness,
+  checkSession,
 };

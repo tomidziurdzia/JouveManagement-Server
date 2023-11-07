@@ -2,7 +2,6 @@ import { Router } from "express";
 import {
   getBusinesses,
   postBusiness,
-  getBusiness,
   putBusiness,
   forgetPasswordBusiness,
   newPasswordBusiness,
@@ -15,7 +14,6 @@ const router: Router = Router();
 router.route("/").get(getBusinesses).post(postBusiness);
 router
   .route("/:id")
-  .get(checkAuth, getBusiness)
   .put(checkAuth, putBusiness)
   .delete(checkAuth, deleteBusiness);
 router.post("/forget-password", forgetPasswordBusiness);

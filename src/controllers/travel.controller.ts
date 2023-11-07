@@ -273,8 +273,6 @@ const putTravel = async (req: Request, res: Response) => {
 };
 
 const deleteTravel = async (req: Request, res: Response) => {
-  //TODO: Me falta agregar que no pueda eliminar travels si tienen envios asignados
-
   const { id } = req.params;
   const businessId = req.body.business.id_business;
 

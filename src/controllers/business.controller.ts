@@ -83,6 +83,7 @@ const postBusiness = async (req: Request, res: Response) => {
 
 const getBusiness = async (req: Request, res: Response) => {
   const { id } = req.params;
+  console.log(req);
   try {
     const businessExist = await Business.findByPk(id);
 
