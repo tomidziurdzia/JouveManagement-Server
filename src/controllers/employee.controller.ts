@@ -5,9 +5,15 @@ import { Op } from "sequelize";
 import { checkRegexPassword, hashPassword } from "../utils";
 
 const getEmployees = async (req: Request, res: Response) => {
+  const { page = 1, size = 5 } = req.query;
+  const limit = +size;
+  const offset = (+page - 1) * +size;
+
   const businessId = req.body.business.id_business;
   try {
-    const employees = await Employee.findAll({
+    const { count, rows } = await Employee.findAndCountAll({
+      limit,
+      offset,
       attributes: [
         "id_employee",
         "name",
@@ -25,7 +31,10 @@ const getEmployees = async (req: Request, res: Response) => {
       ],
     });
 
-    res.json(employees);
+    res.json({
+      total: count,
+      employees: rows,
+    });
   } catch (error: any) {
     console.log(error);
     return res.status(404).json({ msg: error.message });
@@ -36,6 +45,7 @@ const createEmployee = async (req: Request, res: Response) => {
     await Employee.sync();
     const { name, lastname, cuil, password, type }: EmployeeInterface =
       req.body;
+    console.log(req.body);
 
     // Prevenir Business duplicados
     const employeeExist = await Employee.findOne({
@@ -131,7 +141,7 @@ const putEmployee = async (req: Request, res: Response) => {
     employeeExist!.picture = picture || employeeExist?.picture;
     employeeExist!.type = type || employeeExist?.type;
 
-    checkRegexPassword(password);
+    //checkRegexPassword(password);
     employeeExist!.password = hashPassword(password) || employeeExist?.password;
 
     await employeeExist?.save();

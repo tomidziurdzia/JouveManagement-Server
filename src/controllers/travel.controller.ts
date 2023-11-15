@@ -3,9 +3,15 @@ import { Travel, Business, Employee, Vehicle, Shipment } from "../models";
 import { TravelInterface } from "../interface/travel.interface";
 
 const getTravels = async (req: Request, res: Response) => {
+  const { page = 1, size = 5 } = req.query;
+  const limit = +size;
+  const offset = (+page - 1) * +size;
   const businessId = req.body.business.id_business;
+
   try {
-    const travels = await Travel.findAll({
+    const { count, rows } = await Travel.findAndCountAll({
+      limit,
+      offset,
       attributes: ["date", "id_travel"],
       include: [
         {
@@ -36,36 +42,38 @@ const getTravels = async (req: Request, res: Response) => {
       ],
     });
 
-    const formattedTravels = travels.map((travel) => ({
-      id_travel: travel.id_travel,
-      date: travel.date,
-      truck: {
-        model: travel.truck.model,
-        patent: travel.truck.patent,
-        typeVehicle: travel.truck.typeVehicle,
-        picture: travel.truck.picture,
-      },
-      semi: {
-        model: travel.semi.model,
-        patent: travel.semi.patent,
-        typeVehicle: travel.semi.typeVehicle,
-        picture: travel.semi.picture,
-      },
-      truck_driver: {
-        name: travel.truck_driver.name,
-        lastname: travel.truck_driver.lastname,
-        type: travel.truck_driver.type,
-        picture: travel.truck_driver.picture,
-      },
-      truck_assistant: {
-        name: travel.truck_assistant.name,
-        lastname: travel.truck_assistant.lastname,
-        type: travel.truck_assistant.type,
-        picture: travel.truck_assistant.picture,
-      },
-    }));
-
-    res.json(formattedTravels);
+    // const formattedTravels = rows.map((travel) => ({
+    //   id_travel: travel.id_travel,
+    //   date: travel.date,
+    //   truck: {
+    //     model: travel.truck.model,
+    //     patent: travel.truck.patent,
+    //     typeVehicle: travel.truck.typeVehicle,
+    //     picture: travel.truck.picture,
+    //   },
+    //   semi: {
+    //     model: travel.semi.model,
+    //     patent: travel.semi.patent,
+    //     typeVehicle: travel.semi.typeVehicle,
+    //     picture: travel.semi.picture,
+    //   },
+    //   truck_driver: {
+    //     name: travel.truck_driver.name,
+    //     lastname: travel.truck_driver.lastname,
+    //     type: travel.truck_driver.type,
+    //     picture: travel.truck_driver.picture,
+    //   },
+    //   truck_assistant: {
+    //     name: travel.truck_assistant.name,
+    //     lastname: travel.truck_assistant.lastname,
+    //     type: travel.truck_assistant.type,
+    //     picture: travel.truck_assistant.picture,
+    //   },
+    // }));
+    res.json({
+      total: count,
+      travels: rows,
+    });
   } catch (error: any) {
     console.log(error);
     return res.status(404).json({ msg: error.message });
@@ -73,30 +81,32 @@ const getTravels = async (req: Request, res: Response) => {
 };
 
 const createTravel = async (req: Request, res: Response) => {
-  const { date, id_driver, id_truck, id_semi } = req.body;
+  await Travel.sync();
+
+  const { date, truck_driver, truck, semi } = req.body;
+  console.log(req.body);
   try {
     const driverExist = await Employee.findAll({
       where: {
-        id_employee: id_driver,
+        id_employee: truck_driver,
         type: "Driver",
       },
     });
 
     const vehicleExist = await Vehicle.findAll({
       where: {
-        id_vehicle: id_truck,
+        id_vehicle: truck,
         typeVehicle: ["chasis truck", "balancin truck", "tractor"],
       },
     });
 
     const semirremolqueExist = await Vehicle.findAll({
       where: {
-        id_vehicle: id_semi!,
+        id_vehicle: semi!,
         typeVehicle: ["semirremolque"],
       },
     });
 
-    await Travel.sync();
     if (date === "") {
       const error = new Error("Date cannot be empty");
       return res.status(400).json({ msg: error.message });
@@ -133,12 +143,11 @@ const createTravel = async (req: Request, res: Response) => {
 
     // Asign id business
     newTravel.id_business = req.body.business.id_business;
-    newTravel.id_vehicle = req.body.id_truck;
-    newTravel.id_semirremolque =
-      req.body.id_semi.length === 0 ? "-" : req.body.id_semi;
-    newTravel.id_driver = req.body.id_driver;
+    newTravel.id_vehicle = req.body.truck;
+    newTravel.id_semirremolque = req.body.semi === "" ? "-" : req.body.semi;
+    newTravel.id_driver = req.body.truck_driver;
     newTravel.id_assistant =
-      req.body.id_assistant.length === 0 ? "-" : req.body.id_assistant;
+      req.body.truck_assistant === "" ? "-" : req.body.truck_assistant;
 
     await newTravel.save();
     res.json(newTravel);

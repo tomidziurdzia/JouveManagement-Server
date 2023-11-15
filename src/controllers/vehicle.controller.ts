@@ -4,9 +4,14 @@ import { VehicleInterface } from "../interface/vehicle.interface";
 import { Op } from "sequelize";
 
 const getVehicles = async (req: Request, res: Response) => {
+  const { page = 1, size = 5 } = req.query;
+  const limit = +size;
+  const offset = (+page - 1) * +size;
   const businessId = req.body.business.id_business;
   try {
-    const vehicles = await Vehicle.findAll({
+    const { count, rows } = await Vehicle.findAndCountAll({
+      limit,
+      offset,
       attributes: ["id_vehicle", "patent", "model", "typeVehicle", "picture"],
       include: [
         {
@@ -17,7 +22,10 @@ const getVehicles = async (req: Request, res: Response) => {
       ],
     });
 
-    res.json(vehicles);
+    res.json({
+      total: count,
+      vehicles: rows,
+    });
   } catch (error: any) {
     console.log(error);
     return res.status(404).json({ msg: error.message });
