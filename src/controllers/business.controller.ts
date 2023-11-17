@@ -83,7 +83,6 @@ const postBusiness = async (req: Request, res: Response) => {
 
 const getBusiness = async (req: Request, res: Response) => {
   const { id } = req.params;
-  console.log(req);
   try {
     const businessExist = await Business.findByPk(id);
 
@@ -119,7 +118,7 @@ const putBusiness = async (req: Request, res: Response) => {
 
     await businessExist.save();
 
-    res.json({ msg: "We have saved your details" });
+    res.json(businessExist);
   } catch (error: any) {
     console.log(error);
     return res.status(400).json({ msg: error.message });

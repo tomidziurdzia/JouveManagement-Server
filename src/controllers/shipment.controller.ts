@@ -67,8 +67,6 @@ const createShipment = async (req: Request, res: Response) => {
     // Asign id business
     newShipment.id_business = req.body.business.id_business;
 
-    console.log(newShipment);
-
     await newShipment.save();
     res.json(newShipment);
   } catch (error: any) {
@@ -102,6 +100,11 @@ const getShipment = async (req: Request, res: Response) => {
           model: Travel,
           attributes: ["id_travel", "date"],
           include: [
+            {
+              model: Business,
+              where: { id_business: businessId },
+              attributes: ["id_business"],
+            },
             {
               model: Employee,
               as: "truck_driver",

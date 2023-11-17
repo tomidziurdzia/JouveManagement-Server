@@ -45,7 +45,6 @@ const createEmployee = async (req: Request, res: Response) => {
     await Employee.sync();
     const { name, lastname, cuil, password, type }: EmployeeInterface =
       req.body;
-    console.log(req.body);
 
     // Prevenir Business duplicados
     const employeeExist = await Employee.findOne({
@@ -146,7 +145,7 @@ const putEmployee = async (req: Request, res: Response) => {
 
     await employeeExist?.save();
 
-    res.json({ msg: "We have saved your details" });
+    res.json(employeeExist);
   } catch (error) {
     console.log(error);
   }

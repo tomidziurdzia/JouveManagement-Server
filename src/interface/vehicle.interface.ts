@@ -4,4 +4,5 @@ export interface VehicleInterface {
   model: string;
   typeVehicle: "chasis truck" | "balancin truck" | "semirremolque" | "tractor";
   picture?: string;
+  id_business?: string;
 }

@@ -80,16 +80,20 @@ const createVehicle = async (req: Request, res: Response) => {
 };
 
 const getVehicle = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const businessId = req.body.business.id_business;
-
   try {
+    const { id } = req.params;
+    const businessId = req.body.business.id_business;
+
+    // Asegúrate de que Vehicle.findByPk(id) devuelve una promesa
     const vehicleExist = await Vehicle.findByPk(id);
+    console.log(vehicleExist?.id_business);
+
     if (vehicleExist?.id_business !== businessId) {
       return res
         .status(404)
         .json({ msg: "Does not belong to the business logged in" });
     }
+
     res.json(vehicleExist);
   } catch (error: any) {
     console.log(error);
@@ -116,7 +120,7 @@ const putVehicles = async (req: Request, res: Response) => {
 
     await vehicleExist?.save();
 
-    res.json({ msg: "We have saved your details" });
+    res.json(vehicleExist);
   } catch (error) {
     console.log(error);
   }
