@@ -1,12 +1,16 @@
 import { Request, Response } from "express";
 import { Business, Employee, Shipment, Travel, Vehicle } from "../models";
 import { ShipmentInterface } from "../interface/shipment.interface";
-import { Op } from "sequelize";
 
 const getShipments = async (req: Request, res: Response) => {
+  const { page = 1, size = 5 } = req.query;
+  const limit = +size;
+  const offset = (+page - 1) * +size;
   const businessId = req.body.business.id_business;
   try {
-    const shipments = await Shipment.findAll({
+    const { count, rows } = await Shipment.findAndCountAll({
+      limit,
+      offset,
       attributes: [
         "id_shipment",
         "from",
@@ -25,12 +29,28 @@ const getShipments = async (req: Request, res: Response) => {
         },
         {
           model: Travel,
-          attributes: ["id_travel"],
+          attributes: ["id_travel", "date"],
+          as: "travel",
+          include: [
+            {
+              model: Employee,
+              attributes: ["name", "lastname"],
+              as: "truck_driver",
+            },
+            {
+              model: Vehicle,
+              attributes: ["patent"],
+              as: "truck",
+            },
+          ],
         },
       ],
     });
 
-    res.json(shipments);
+    res.json({
+      total: count,
+      shipments: rows,
+    });
   } catch (error: any) {
     console.log(error);
     return res.status(404).json({ msg: error.message });
@@ -99,43 +119,17 @@ const getShipment = async (req: Request, res: Response) => {
         {
           model: Travel,
           attributes: ["id_travel", "date"],
+          as: "travel",
           include: [
             {
-              model: Business,
-              where: { id_business: businessId },
-              attributes: ["id_business"],
-            },
-            {
               model: Employee,
+              attributes: ["name", "lastname"],
               as: "truck_driver",
-              attributes: [
-                "id_employee",
-                "name",
-                "lastname",
-                "picture",
-                "type",
-              ],
-            },
-            {
-              model: Employee,
-              as: "truck_assistant",
-              attributes: [
-                "id_employee",
-                "name",
-                "lastname",
-                "picture",
-                "type",
-              ],
             },
             {
               model: Vehicle,
-              attributes: ["model", "patent", "typeVehicle", "picture"],
+              attributes: ["patent"],
               as: "truck",
-            },
-            {
-              model: Vehicle,
-              attributes: ["model", "patent", "typeVehicle", "picture"],
-              as: "semi",
             },
           ],
         },
@@ -157,16 +151,8 @@ const getShipment = async (req: Request, res: Response) => {
 const putShipment = async (req: Request, res: Response) => {
   const { id } = req.params;
   const businessId = req.body.business.id_business;
-
-  const {
-    from,
-    to,
-    client,
-    description,
-    id_travel,
-    reason,
-    picture,
-  }: ShipmentInterface = req.body;
+  const { from, to, client, description, id_travel }: ShipmentInterface =
+    req.body;
 
   try {
     const shipmentExist = await Shipment.findByPk(id, {

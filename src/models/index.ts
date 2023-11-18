@@ -37,7 +37,7 @@ Travel.belongsTo(Employee, {
   as: "truck_assistant",
 });
 
-Shipment.belongsTo(Travel, { foreignKey: "id_travel" });
-Travel.belongsTo(Shipment, { foreignKey: "id_travel" });
+Shipment.belongsTo(Travel, { foreignKey: "id_travel", as: "travel" });
+Travel.belongsTo(Shipment, { foreignKey: "id_travel", as: "travel" });
 
 export { Business, Employee, Vehicle, Travel, Shipment };
