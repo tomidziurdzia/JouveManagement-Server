@@ -151,8 +151,14 @@ const getShipment = async (req: Request, res: Response) => {
 const putShipment = async (req: Request, res: Response) => {
   const { id } = req.params;
   const businessId = req.body.business.id_business;
-  const { from, to, client, description, id_travel }: ShipmentInterface =
-    req.body;
+  const {
+    from,
+    to,
+    client,
+    description,
+    id_travel,
+    delivered,
+  }: ShipmentInterface = req.body;
 
   try {
     const shipmentExist = await Shipment.findByPk(id, {
@@ -165,6 +171,7 @@ const putShipment = async (req: Request, res: Response) => {
         "id_shipment",
         "reason",
         "picture",
+        "delivered",
       ],
       include: [
         {
@@ -182,19 +189,19 @@ const putShipment = async (req: Request, res: Response) => {
     }
 
     if (from === "") {
-      const error = new Error("Date cannot be empty");
+      const error = new Error("From cannot be empty");
       return res.status(400).json({ msg: error.message });
     }
     if (to === "") {
-      const error = new Error("Date cannot be empty");
+      const error = new Error("To cannot be empty");
       return res.status(400).json({ msg: error.message });
     }
     if (client === "") {
-      const error = new Error("Date cannot be empty");
+      const error = new Error("Client cannot be empty");
       return res.status(400).json({ msg: error.message });
     }
     if (description === "") {
-      const error = new Error("Date cannot be empty");
+      const error = new Error("Description cannot be empty");
       return res.status(400).json({ msg: error.message });
     }
     if (id_travel === "") {
@@ -206,6 +213,7 @@ const putShipment = async (req: Request, res: Response) => {
     shipmentExist!.to = to || shipmentExist?.to;
     shipmentExist!.client = client || shipmentExist?.client;
     shipmentExist!.description = description || shipmentExist?.description;
+    shipmentExist!.delivered = delivered; //|| shipmentExist?.delivered;
     shipmentExist!.id_travel = id_travel || shipmentExist?.id_travel;
 
     await shipmentExist?.save();

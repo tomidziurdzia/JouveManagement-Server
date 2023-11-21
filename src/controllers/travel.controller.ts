@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { Travel, Business, Employee, Vehicle, Shipment } from "../models";
-import { TravelInterface } from "../interface/travel.interface";
-import { VehicleInterface } from "../interface/vehicle.interface";
 
 const getTravels = async (req: Request, res: Response) => {
   const { page = 1, size = 5 } = req.query;
@@ -11,6 +9,7 @@ const getTravels = async (req: Request, res: Response) => {
 
   try {
     const { count, rows } = await Travel.findAndCountAll({
+      order: [["date", "DESC"]],
       limit,
       offset,
       attributes: ["date", "id_travel"],
