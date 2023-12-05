@@ -3,8 +3,6 @@ import { Business, Employee, Travel } from "../models";
 import { EmployeeInterface } from "../interface/employee.interface";
 import { Op } from "sequelize";
 import { checkRegexPassword, hashPassword } from "../utils";
-import fs from "fs";
-import path from "path";
 
 const getEmployees = async (req: Request, res: Response) => {
   const { page = 1, size = 5 } = req.query;
