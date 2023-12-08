@@ -7,20 +7,23 @@ export const checkAuthEmployee = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.header("Authorization");
+  let token;
+
+  token = req.header("Authorization");
+
+  if (token?.startsWith("Bearer")) {
+    token = token.split(" ")[1] || "";
+  }
 
   if (!token) return res.status(401).json({ error: "Not token provided" });
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-
     if (!decoded) {
       return res.status(401).json({ error: "Invalid token" });
     }
     const decodedId = await Object.values(decoded)[0];
 
     const checkEmployee = await Employee.findByPk(decodedId);
-
     if (!checkEmployee) {
       return res.status(401).json({ error: "Invalid token - user" });
     }

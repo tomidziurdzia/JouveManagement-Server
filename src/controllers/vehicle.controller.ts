@@ -74,7 +74,7 @@ const createVehicle = async (req: Request, res: Response) => {
     await newVehicle.save();
     res.json(newVehicle);
   } catch (error: any) {
-    console.error(error);
+    console.log(error);
     res.status(400).json({ msg: error.message });
   }
 };
@@ -86,7 +86,6 @@ const getVehicle = async (req: Request, res: Response) => {
 
     // Asegúrate de que Vehicle.findByPk(id) devuelve una promesa
     const vehicleExist = await Vehicle.findByPk(id);
-    console.log(vehicleExist?.id_business);
 
     if (vehicleExist?.id_business !== businessId) {
       return res

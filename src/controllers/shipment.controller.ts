@@ -90,7 +90,7 @@ const createShipment = async (req: Request, res: Response) => {
     await newShipment.save();
     res.json(newShipment);
   } catch (error: any) {
-    console.error(error);
+    console.log(error);
     res.status(400).json({ msg: error.message });
   }
 };

@@ -99,7 +99,7 @@ const createEmployee = async (req: Request, res: Response) => {
     await newEmployee.save();
     res.json(newEmployee);
   } catch (error: any) {
-    console.error(error);
+    console.log(error);
     res.status(400).json({ msg: error.message });
   }
 };

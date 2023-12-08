@@ -93,8 +93,6 @@ const createTravel = async (req: Request, res: Response) => {
       const error = new Error("Semirremolque cannot be empty");
       return res.status(400).json({ msg: error.message });
     }
-    console.log("hola");
-    console.log(semi);
 
     if (
       vehicleExist?.typeVehicle !== "tractor" &&
@@ -118,7 +116,7 @@ const createTravel = async (req: Request, res: Response) => {
 
     res.json(newTravel);
   } catch (error: any) {
-    console.error(error);
+    console.log(error);
     res.status(400).json({ msg: error.message });
   }
 };

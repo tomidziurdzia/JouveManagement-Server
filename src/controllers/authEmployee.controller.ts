@@ -1,11 +1,9 @@
 import { Request, Response } from "express";
 import { Business, Employee } from "../models";
-import { EmployeeInterface } from "../interface/employee.interface";
 import { comparePassword, generateJWT } from "../utils";
 
 const authEmployee = async (req: Request, res: Response) => {
   const { cuil, password, cuit } = req.body;
-  console.log(cuil, password, cuit);
 
   // Comprobar si el usuario existe
   const employeeExist = await Employee.findOne({ where: { cuil } });

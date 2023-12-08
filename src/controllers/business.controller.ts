@@ -76,7 +76,7 @@ const postBusiness = async (req: Request, res: Response) => {
     await newBusiness.save();
     res.json(newBusiness);
   } catch (error: any) {
-    console.error(error);
+    console.log(error);
     res.status(400).json({ msg: error.message });
   }
 };
