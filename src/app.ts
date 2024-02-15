@@ -32,7 +32,7 @@ app.use(express.json());
 // Routing
 app.use("/api", routes);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000 || "0.0.0.0";
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
