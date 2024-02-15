@@ -90,7 +90,7 @@ const createShipment = async (req: Request, res: Response) => {
     await newShipment.save();
     res.json(newShipment);
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     res.status(400).json({ msg: error.message });
   }
 };
@@ -139,7 +139,7 @@ const getShipment = async (req: Request, res: Response) => {
     if (shipmentExist?.Business.id_business !== businessId) {
       return res
         .status(404)
-        .json({ msg: "Does not belong to the business logged in" });
+        .json({ msg: "Does not belong to the business logged in8" });
     }
     res.json(shipmentExist);
   } catch (error: any) {
@@ -185,7 +185,7 @@ const putShipment = async (req: Request, res: Response) => {
     if (shipmentExist?.Business.id_business !== businessId) {
       return res
         .status(404)
-        .json({ msg: "Does not belong to the business logged in" });
+        .json({ msg: "Does not belong to the business logged in9" });
     }
 
     if (from === "") {
@@ -233,7 +233,7 @@ const deleteShipment = async (req: Request, res: Response) => {
     if (shipmentExist?.id_business !== businessId) {
       return res
         .status(404)
-        .json({ msg: "Does not belong to the business logged in" });
+        .json({ msg: "Does not belong to the business logged in10" });
     }
     await shipmentExist?.destroy();
     res.json({ msg: "Shipment successfully eliminated" });

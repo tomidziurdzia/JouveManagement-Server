@@ -116,7 +116,7 @@ const createTravel = async (req: Request, res: Response) => {
 
     res.json(newTravel);
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     res.status(400).json({ msg: error.message });
   }
 };
@@ -172,7 +172,7 @@ const getTravel = async (req: Request, res: Response) => {
     if (travelExist?.Business.id_business !== businessId) {
       return res
         .status(404)
-        .json({ msg: "Does not belong to the business logged in" });
+        .json({ msg: "Does not belong to the business logged in11" });
     }
     res.json(travelExist);
   } catch (error: any) {
@@ -207,7 +207,7 @@ const putTravel = async (req: Request, res: Response) => {
     if (travelExist?.Business.id_business !== businessId) {
       return res
         .status(404)
-        .json({ msg: "Does not belong to the business logged in" });
+        .json({ msg: "Does not belong to the business logged in12" });
     }
 
     travelExist!.date = date || travelExist?.date;
@@ -259,7 +259,7 @@ const deleteTravel = async (req: Request, res: Response) => {
     if (travelExist?.id_business !== businessId) {
       return res
         .status(404)
-        .json({ msg: "Does not belong to the business logged in" });
+        .json({ msg: "Does not belong to the business logged in13" });
     }
 
     if (shipmentExist.length !== 0) {

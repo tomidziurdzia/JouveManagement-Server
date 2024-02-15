@@ -22,7 +22,6 @@ export const checkAuthEmployee = async (
       return res.status(401).json({ error: "Invalid token" });
     }
     const decodedId = await Object.values(decoded)[0];
-
     const checkEmployee = await Employee.findByPk(decodedId);
     if (!checkEmployee) {
       return res.status(401).json({ error: "Invalid token - user" });

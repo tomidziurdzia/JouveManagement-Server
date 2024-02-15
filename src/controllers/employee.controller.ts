@@ -112,7 +112,7 @@ const getEmployee = async (req: Request, res: Response) => {
     if (employeeExist?.id_business !== businessId) {
       return res
         .status(404)
-        .json({ msg: "Does not belong to the business logged in" });
+        .json({ msg: "Does not belong to the business logged in3" });
     }
     res.json(employeeExist);
   } catch (error: any) {
@@ -132,7 +132,7 @@ const putEmployee = async (req: Request, res: Response) => {
     if (employeeExist?.id_business !== businessId) {
       return res
         .status(404)
-        .json({ msg: "Does not belong to the business logged in" });
+        .json({ msg: "Does not belong to the business logged in4" });
     }
 
     employeeExist!.name = name || employeeExist?.name;
@@ -165,7 +165,7 @@ const deleteEmployee = async (req: Request, res: Response) => {
     if (employeeExist?.id_business !== businessId) {
       return res
         .status(404)
-        .json({ msg: "Does not belong to the business logged in" });
+        .json({ msg: "Does not belong to the business logged in5" });
     }
 
     if (travelExist.length !== 0) {

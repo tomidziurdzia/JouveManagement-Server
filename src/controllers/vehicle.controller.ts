@@ -90,7 +90,7 @@ const getVehicle = async (req: Request, res: Response) => {
     if (vehicleExist?.id_business !== businessId) {
       return res
         .status(404)
-        .json({ msg: "Does not belong to the business logged in" });
+        .json({ msg: "Does not belong to the business logged in14" });
     }
 
     res.json(vehicleExist);
@@ -109,7 +109,7 @@ const putVehicles = async (req: Request, res: Response) => {
     if (vehicleExist?.id_business !== businessId) {
       return res
         .status(404)
-        .json({ msg: "Does not belong to the business logged in" });
+        .json({ msg: "Does not belong to the business logged in15" });
     }
 
     vehicleExist!.patent = patent || vehicleExist?.patent;
@@ -138,7 +138,7 @@ const deleteVehicle = async (req: Request, res: Response) => {
     if (vehicleExist?.id_business !== businessId) {
       return res
         .status(404)
-        .json({ msg: "Does not belong to the business logged in" });
+        .json({ msg: "Does not belong to the business logged in16" });
     }
 
     if (travelExist.length !== 0) {
