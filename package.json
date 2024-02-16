@@ -19,7 +19,7 @@
     "@types/jsonwebtoken": "^9.0.4",
     "@types/node": "^20.8.9",
     "@types/nodemailer": "^6.4.13",
-    "nod": "^3.0.1",
+    "nodemon": "^3.0.1",
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
