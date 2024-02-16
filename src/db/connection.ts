@@ -17,7 +17,7 @@ const connectDB = async () => {
     await db.authenticate();
     console.log("Database online");
   } catch (error) {
-    console.log(`Error: ${error}`);
+    console.log(`Error llego aca: ${error}`);
     process.exit(1);
   }
 };
