@@ -15,7 +15,10 @@ connectDB();
 // Configurar CORS
 // Probando Git de Back
 
-const whitelist = [process.env.FRONTEND_URL];
+const whitelist = [
+  process.env.FRONTEND_URL,
+  "https://jouvemanagement-server-production.up.railway.app/api/auth/login",
+];
 
 const corsOptions = {
   origin: function (origin: any, callback: any) {
