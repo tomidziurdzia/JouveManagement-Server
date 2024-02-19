@@ -14,7 +14,10 @@ connectDB();
 // Configurar CORS
 // Probando Git de Back
 
-const whitelist = [process.env.FRONTEND_URL];
+const whitelist = [
+  process.env.FRONTEND_URL,
+  "https://jouve-management-client.vercel.app/auth/signin",
+];
 console.log(whitelist);
 
 const corsOptions = {
