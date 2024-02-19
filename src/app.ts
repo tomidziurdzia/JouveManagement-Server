@@ -5,13 +5,17 @@ import routes from "./routes";
 import connectDB from "./db/connection";
 
 const app: Application = express();
+app.use(express.json());
+
 dotenv.config();
 
-// Call Database
 connectDB();
 
-// Configurate CORS
+// Configurar CORS
+// Probando Git de Back
+
 const whitelist = [process.env.FRONTEND_URL];
+console.log(whitelist);
 
 const corsOptions = {
   origin: function (origin: any, callback: any) {
@@ -25,8 +29,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json());
-
 // Routing
 app.use("/api", routes);
 
