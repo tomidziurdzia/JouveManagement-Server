@@ -19,7 +19,7 @@ const corsOptions = {
       // El origen del request esta permitido
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error("No permitido por CORS"));
     }
   },
 };
