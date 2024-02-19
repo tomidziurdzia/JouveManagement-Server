@@ -5,13 +5,16 @@ import routes from "./routes";
 import connectDB from "./db/connection";
 
 const app: Application = express();
+app.use(express.json());
+
 dotenv.config();
 app.use(express.json());
 
-// Call Database
 connectDB();
 
-// Configurate CORS
+// Configurar CORS
+// Probando Git de Back
+
 const whitelist = [process.env.FRONTEND_URL];
 
 const corsOptions = {
@@ -20,7 +23,7 @@ const corsOptions = {
       // El origen del request esta permitido
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error("No permitido por CORS"));
     }
   },
 };
