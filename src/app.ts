@@ -6,6 +6,7 @@ import connectDB from "./db/connection";
 
 const app: Application = express();
 dotenv.config();
+app.use(express.json());
 
 // Call Database
 connectDB();
@@ -25,8 +26,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(cors());
-app.use(express.json());
 
 // Routing
 app.use("/api", routes);
