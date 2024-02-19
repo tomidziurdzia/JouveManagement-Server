@@ -33,8 +33,7 @@ app.use(cors(corsOptions));
 // Routing
 app.use("/api", routes);
 
-const port = process.env.MYSQLPORT || 3000;
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+const PORT = parseInt(process.env.PORT!, 10) || 3000; // Puerto de tu elección
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
